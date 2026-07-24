@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#17352f">
+  <title>Netflick</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">NETFLICK · SESSION CONTROL</p>
+      <h1>Fair courts. No arithmetic.</h1>
+    </div>
+    <button id="new-session" class="ghost" hidden>New session</button>
+  </header>
+
+  <main>
+    <section id="connect-view" class="panel narrow" hidden>
+      <p class="kicker">ONE-TIME CONNECTION</p>
+      <h2>Connect the player table</h2>
+      <p class="muted">The Worker keeps the Notion credential off this phone. Session counters stay local.</p>
+      <label>Worker URL<input id="worker-url" type="url" placeholder="https://netflick-proxy.example.workers.dev" autocomplete="url"></label>
+      <label>Organizer key<input id="app-key" type="password" placeholder="App key" autocomplete="current-password"></label>
+      <p id="connect-error" class="error" role="alert"></p>
+      <div class="actions"><button id="connect" class="primary">Connect</button><button id="demo" class="secondary">Use demo players</button></div>
+    </section>
+
+    <section id="setup-view" hidden>
+      <div class="setup-grid">
+        <div class="panel">
+          <p class="kicker">STEP 1</p><h2>How many courts?</h2>
+          <div class="stepper large"><button data-court-delta="-1" aria-label="Remove court">−</button><output id="setup-courts">2</output><button data-court-delta="1" aria-label="Add court">+</button></div>
+          <p id="capacity-note" class="muted"></p>
+        </div>
+        <div class="panel roster-picker">
+          <div class="section-head"><div><p class="kicker">STEP 2</p><h2>Who is playing?</h2></div><span id="selected-count" class="metric">0 selected</span></div>
+          <input id="player-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
+          <div id="player-picker" class="picker-list"></div>
+          <button id="open-add-player" class="text-button">+ Add a player</button>
+        </div>
+      </div>
+      <div class="sticky-action"><p id="setup-warning" class="warning"></p><button id="start-session" class="primary wide">Start session</button></div>
+    </section>
+
+    <section id="live-view" hidden>
+      <div class="live-toolbar panel">
+        <div><p class="kicker">LIVE SESSION</p><h2 id="session-title">Tonight</h2></div>
+        <div class="stepper"><button data-live-court-delta="-1" aria-label="Remove court">−</button><output id="live-courts">2 courts</output><button data-live-court-delta="1" aria-label="Add court">+</button></div>
+      </div>
+      <div id="summary" class="summary" aria-label="Session summary"></div>
+      <div class="live-grid">
+        <section>
+          <div class="section-head"><div><p class="kicker">NEXT ROUND</p><h2>Recommended courts</h2></div><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div>
+          <div id="recommendations" class="court-list"></div>
+          <div id="waiting" class="waiting"></div>
+        </section>
+        <section>
+          <div class="section-head"><div><p class="kicker">FAIRNESS LEDGER</p><h2>Players</h2></div><button id="live-add-player" class="text-button">+ Join</button></div>
+          <div id="ledger" class="ledger"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="player-dialog">
+    <form method="dialog" id="player-form">
+      <div class="dialog-head"><div><p class="kicker">PLAYER</p><h2 id="player-dialog-title">Add player</h2></div><button type="button" data-close-dialog class="icon-button" aria-label="Close">×</button></div>
+      <input id="edit-player-id" type="hidden">
+      <label>Name<input id="player-name" maxlength="100" required></label>
+      <div class="two-col"><label>Gender<select id="player-gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></label><label>Level<select id="player-level" required><option value="">Select</option><option>A</option><option>B</option><option>C</option></select></label></div>
+      <p id="player-error" class="error" role="alert"></p>
+      <div class="actions"><button type="button" data-close-dialog class="secondary">Cancel</button><button id="save-player" value="default" class="primary">Save player</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

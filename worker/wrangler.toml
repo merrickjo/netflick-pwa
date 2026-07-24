@@ -1,0 +1,11 @@
+name = "netflick-proxy"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://merrickjo.github.io"
+PLAYERS_DATA_SOURCE_ID = "9923673e29934f84be59b12de2f58ef1"
+
+# Set once from this folder:
+# wrangler secret put NOTION_TOKEN
+# wrangler secret put APP_KEY

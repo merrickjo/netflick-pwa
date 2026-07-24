@@ -1,0 +1,12 @@
+{
+  "name": "Netflick Session Control",
+  "short_name": "Netflick",
+  "description": "Fair badminton court rotation and matchmaking",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f3f1ea",
+  "theme_color": "#17352f",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
