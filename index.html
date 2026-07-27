@@ -55,7 +55,7 @@
       <div id="summary" class="summary" aria-label="Session summary"></div>
       <div class="live-grid">
         <section>
-          <div class="section-head"><div><p class="kicker">NEXT ROUND</p><h2>Recommended courts</h2></div><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div>
+          <div class="section-head"><div><p class="kicker">NEXT ROUND</p><h2>Recommended courts</h2></div><div class="actions" style="margin:0"><button id="log-custom-match" class="text-button" type="button">+ Log custom</button><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div></div>
           <div id="recommendations" class="court-list"></div>
           <div id="waiting" class="waiting"></div>
         </section>
@@ -76,6 +76,17 @@
       <div class="two-col"><label>Gender<select id="player-gender" required><option value="">Select</option><option>Male</option><option>Female</option></select></label><label>Level<select id="player-level" required><option value="">Select</option><option>A</option><option>B</option><option>C</option></select></label></div>
       <p id="player-error" class="error" role="alert"></p>
       <div class="actions"><button type="button" data-close-dialog class="secondary">Cancel</button><button id="save-player" value="default" class="primary">Save player</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="lineup-dialog">
+    <form method="dialog" id="lineup-form">
+      <div class="dialog-head"><div><p class="kicker">COURT</p><h2 id="lineup-dialog-title">Log a match</h2></div><button type="button" data-close-dialog class="icon-button" aria-label="Close">×</button></div>
+      <input id="lineup-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
+      <p id="lineup-count" class="muted">0 of 4 selected</p>
+      <div id="lineup-picker" class="picker-list"></div>
+      <p id="lineup-error" class="error" role="alert"></p>
+      <div class="actions"><button type="button" data-close-dialog class="secondary">Cancel</button><button id="lineup-confirm" type="button" class="primary" disabled>Log · +1 all</button></div>
     </form>
   </dialog>
 
