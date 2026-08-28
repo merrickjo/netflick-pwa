@@ -88,3 +88,22 @@ export function isLegal(match) {
   if (match.type==='XD') return genders.filter(g=>g==='Male').length===2 && match.teamA.some(p=>p.gender==='Male') && match.teamA.some(p=>p.gender==='Female') && match.teamB.some(p=>p.gender==='Male') && match.teamB.some(p=>p.gender==='Female');
   return false;
 }
+
+// --- Round analysis (pure; used by the session round log, not by recommend()) ---
+export const PARTITIONS = [[[0,1],[2,3]], [[0,2],[1,3]], [[0,3],[1,2]]];
+export const strength = team => team.reduce((n,p)=>n+(LEVEL[p.level]||0),0);
+export function lineupType(four){const m=four.filter(p=>p.gender==='Male').length;return m===4?'MD':m===0?'WD':m===2?'XD':'MIX'}
+// Merrick's rule set, evaluated in order (MECE): carry > intensity > light.
+export function roundRole(round, id){
+  const inA = round.teamA.some(p=>p.id===id);
+  const mine = inA?round.teamA:round.teamB, opp = inA?round.teamB:round.teamA;
+  const me = mine.find(p=>p.id===id), mate = mine.find(p=>p.id!==id);
+  if(!me||!mate) return null;
+  if((LEVEL[me.level]||0) > (LEVEL[mate.level]||0)) return 'carry';
+  return strength(opp) >= strength(mine) ? 'intensity' : 'light';
+}
+export function roundTier(round){
+  const all=[...round.teamA,...round.teamB];
+  const a=strength(all)/all.length;
+  return a>=2.5?'A':a>=1.5?'B':'C';
+}

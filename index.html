@@ -55,7 +55,10 @@
       <div id="summary" class="summary" aria-label="Session summary"></div>
       <div class="live-grid">
         <section>
-          <div class="section-head"><div><p class="kicker">NEXT ROUND</p><h2>Recommended courts</h2></div><div class="actions" style="margin:0"><button id="log-custom-match" class="text-button" type="button">+ Log custom</button><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div></div>
+          <div class="section-head"><div><p class="kicker">NOW PLAYING</p><h2>Courts</h2></div><span id="courts-note" class="metric"></span></div>
+          <div id="courts" class="court-list"></div>
+
+          <div class="section-head" style="margin-top:28px"><div><p class="kicker">SUGGESTIONS</p><h2>Who to call next</h2></div><div class="actions" style="margin:0"><button id="log-custom-match" class="text-button" type="button">+ Log custom</button><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div></div>
           <div id="recommendations" class="court-list"></div>
           <div id="waiting" class="waiting"></div>
         </section>
@@ -85,8 +88,9 @@
       <input id="lineup-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
       <p id="lineup-count" class="muted">0 of 4 selected</p>
       <div id="lineup-picker" class="picker-list"></div>
+      <div id="lineup-teams" class="lineup-teams" hidden></div>
       <p id="lineup-error" class="error" role="alert"></p>
-      <div class="actions"><button type="button" data-close-dialog class="secondary">Cancel</button><button id="lineup-confirm" type="button" class="primary" disabled>Log · +1 all</button></div>
+      <div class="actions"><button type="button" data-close-dialog class="secondary">Cancel</button><button id="lineup-confirm" type="button" class="primary" disabled>Start</button></div>
     </form>
   </dialog>
 
