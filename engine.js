@@ -12,31 +12,46 @@ const removeIds = (arr, used) => arr.filter(p => !used.has(p.playerId));
 const teamStrength = team => team.reduce((n, p) => n + LEVEL[p.level], 0);
 const keyPlayers = ps => ps.map(p => p.playerId).sort().join('|');
 
-function bestSameGenderMatch(players) {
-  let best = null;
+// Ranks a candidate match by fairness (lower total count wins first, same priority
+// order as the rest of the app), then level gap, then a deterministic key.
+const matchCmp = (x, y) => x.fairness - y.fairness || x.gap - y.gap || (x.key < y.key ? -1 : x.key > y.key ? 1 : 0);
+
+// avoid = a Set of four-player signatures (keyPlayers(four)) to steer away from when
+// possible -- used by "Refresh" to surface a genuinely different grouping instead of
+// reproducing the exact same four people every time it's pressed. It's a soft steer,
+// not a hard filter: if every option is avoided, the fairest one still gets returned.
+function bestSameGenderMatch(players, avoid) {
+  let best = null, bestAllowed = null;
   for (const four of combinations(players, 4)) {
     const [a,b,c,d] = four;
     const partitions = [[[a,b],[c,d]], [[a,c],[b,d]], [[a,d],[b,c]]];
+    const fourKey = keyPlayers(four);
     for (const [teamA, teamB] of partitions) {
       const gap = Math.abs(teamStrength(teamA) - teamStrength(teamB));
-      const score = [gap, keyPlayers(four)];
-      if (!best || gap < best.gap || (gap === best.gap && String(score[1]) < best.key)) best = { players: four, teamA, teamB, gap, key: String(score[1]) };
+      const fairness = four.reduce((n,p)=>n+p.count,0);
+      const cand = { players: four, teamA, teamB, gap, fairness, key: fourKey };
+      if (!best || matchCmp(cand,best) < 0) best = cand;
+      if (!avoid.has(fourKey) && (!bestAllowed || matchCmp(cand,bestAllowed) < 0)) bestAllowed = cand;
     }
   }
-  return best;
+  return bestAllowed || best;
 }
 
-function bestMixedMatch(men, women) {
-  let best = null;
+function bestMixedMatch(men, women, avoid) {
+  let best = null, bestAllowed = null;
   for (const ms of combinations(men, 2)) for (const ws of combinations(women, 2)) {
+    const players = [...ms, ...ws]; const playersKey = keyPlayers(players);
     const partitions = [[[ms[0],ws[0]],[ms[1],ws[1]]], [[ms[0],ws[1]],[ms[1],ws[0]]]];
     for (const [teamA, teamB] of partitions) {
       const gap = Math.abs(teamStrength(teamA) - teamStrength(teamB));
-      const players = [...ms, ...ws]; const key = keyPlayers(players) + ':' + keyPlayers(teamA);
-      if (!best || gap < best.gap || (gap === best.gap && key < best.key)) best = { players, teamA, teamB, gap, key };
+      const fairness = players.reduce((n,p)=>n+p.count,0);
+      const key = playersKey + ':' + keyPlayers(teamA);
+      const cand = { players, teamA, teamB, gap, fairness, key };
+      if (!best || matchCmp(cand,best) < 0) best = cand;
+      if (!avoid.has(playersKey) && (!bestAllowed || matchCmp(cand,bestAllowed) < 0)) bestAllowed = cand;
     }
   }
-  return best;
+  return bestAllowed || best;
 }
 
 function compositionCandidates(m, f, courts) {
@@ -59,19 +74,25 @@ function compositionScore(c, men, women, typeCounts) {
   return [-c.total, counts.reduce((a,b)=>a+b,0), Math.max(0,...counts), spread, typeUsage];
 }
 
-export function recommend(roster, courtLimit, typeCounts = { MD: 0, WD: 0, XD: 0 }) {
+export function recommend(roster, courtLimit, typeCounts = { MD: 0, WD: 0, XD: 0 }, avoid = new Set()) {
   const eligible = roster.filter(p => p.status !== 'benched' && ['Male','Female'].includes(p.gender) && LEVEL[p.level]);
   let men = eligible.filter(p=>p.gender==='Male').sort(byCountId);
   let women = eligible.filter(p=>p.gender==='Female').sort(byCountId);
   const compositions = compositionCandidates(men.length, women.length, Math.max(1, Math.min(10, Number(courtLimit)||1)));
   compositions.sort((a,b)=>lex(compositionScore(a,men,women,typeCounts), compositionScore(b,men,women,typeCounts)));
   const choice = compositions[0] || {md:0,wd:0,xd:0,total:0,needM:0,needF:0};
-  men = men.slice(0,choice.needM).sort(byLevelId); women = women.slice(0,choice.needF).sort(byLevelId);
+  // Keep a few extra "next in line" players beyond the strict minimum needed, sorted
+  // by count first so they stay fairness-ordered -- this is what gives bestSameGenderMatch
+  // / bestMixedMatch genuine alternatives to offer when `avoid` steers them away from
+  // the previous pick, instead of only ever being able to re-pair the same four people.
+  const PAD = 3;
+  men = men.slice(0, Math.min(men.length, choice.needM + PAD)).sort(byLevelId);
+  women = women.slice(0, Math.min(women.length, choice.needF + PAD)).sort(byLevelId);
   const matches = [];
   const take = (type) => {
     let best;
-    if (type === 'XD') best = bestMixedMatch(men.slice(0,2),women.slice(0,2));
-    else best = bestSameGenderMatch((type==='MD'?men:women).slice(0,4));
+    if (type === 'XD') best = bestMixedMatch(men.slice(0, Math.min(men.length, 2+PAD)), women.slice(0, Math.min(women.length, 2+PAD)), avoid);
+    else { const pool = type==='MD'?men:women; best = bestSameGenderMatch(pool.slice(0, Math.min(pool.length, 4+PAD)), avoid); }
     if (!best) return;
     const used = new Set(best.players.map(p=>p.playerId));
     men = removeIds(men,used); women = removeIds(women,used);
