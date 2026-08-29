@@ -1,6 +1,6 @@
 const LEVEL = { A: 3, B: 2, C: 1 };
 
-const byCountId = (a, b) => a.count - b.count || a.playerId.localeCompare(b.playerId);
+const byCountId = (a, b) => a.count - b.count || (a.lastUpdated ?? 0) - (b.lastUpdated ?? 0) || a.playerId.localeCompare(b.playerId);
 const byLevelId = (a, b) => LEVEL[b.level] - LEVEL[a.level] || a.count - b.count || a.playerId.localeCompare(b.playerId);
 const lex = (a, b) => { for (let i = 0; i < Math.max(a.length, b.length); i++) { const d = (a[i] ?? 0) - (b[i] ?? 0); if (d) return d; } return 0; };
 const combinations = (arr, k, start = 0, picked = [], out = []) => {
@@ -47,18 +47,24 @@ function compositionCandidates(m, f, courts) {
   return out;
 }
 
-function compositionScore(c, men, women) {
+function compositionScore(c, men, women, typeCounts) {
   const selected = [...men.slice(0,c.needM), ...women.slice(0,c.needF)];
   const counts = selected.map(p=>p.count);
-  return [-c.total, counts.reduce((a,b)=>a+b,0), Math.max(0,...counts), Math.max(0,...counts)-Math.min(0,...counts), -c.xd, -c.md, -c.wd];
+  const spread = counts.length ? Math.max(...counts) - Math.min(...counts) : 0;
+  // Balance which court types get proposed over the session: prefer whichever type
+  // (MD/WD/XD) has been used LESS so far when fairness is tied, instead of a fixed
+  // XD>MD>WD bias. The fixed bias meant WD almost never got proposed even when it
+  // was an equally fair pick, because XD wins every tie by default.
+  const typeUsage = c.md*(typeCounts.MD||0) + c.wd*(typeCounts.WD||0) + c.xd*(typeCounts.XD||0);
+  return [-c.total, counts.reduce((a,b)=>a+b,0), Math.max(0,...counts), spread, typeUsage];
 }
 
-export function recommend(roster, courtLimit) {
+export function recommend(roster, courtLimit, typeCounts = { MD: 0, WD: 0, XD: 0 }) {
   const eligible = roster.filter(p => p.status !== 'benched' && ['Male','Female'].includes(p.gender) && LEVEL[p.level]);
   let men = eligible.filter(p=>p.gender==='Male').sort(byCountId);
   let women = eligible.filter(p=>p.gender==='Female').sort(byCountId);
   const compositions = compositionCandidates(men.length, women.length, Math.max(1, Math.min(10, Number(courtLimit)||1)));
-  compositions.sort((a,b)=>lex(compositionScore(a,men,women), compositionScore(b,men,women)));
+  compositions.sort((a,b)=>lex(compositionScore(a,men,women,typeCounts), compositionScore(b,men,women,typeCounts)));
   const choice = compositions[0] || {md:0,wd:0,xd:0,total:0,needM:0,needF:0};
   men = men.slice(0,choice.needM).sort(byLevelId); women = women.slice(0,choice.needF).sort(byLevelId);
   const matches = [];
