@@ -8,7 +8,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="nav-kit.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="nav-kit.js" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -19,7 +21,7 @@
     <button id="new-session" class="ghost" hidden>New session</button>
   </header>
 
-  <main>
+  <main class="gn-clear">
     <section id="connect-view" class="panel narrow" hidden>
       <p class="kicker">ONE-TIME CONNECTION</p>
       <h2>Connect the player table</h2>
@@ -55,19 +57,28 @@
       <div id="summary" class="summary" aria-label="Session summary"></div>
       <div class="live-grid">
         <section>
-          <div class="section-head"><div><p class="kicker">NOW PLAYING</p><h2>Courts</h2></div><span id="courts-note" class="metric"></span></div>
+          <div class="section-head" id="sec-courts"><div><p class="kicker">NOW PLAYING</p><h2>Courts</h2></div><span id="courts-note" class="metric"></span></div>
           <div id="courts" class="court-list"></div>
 
-          <div class="section-head" style="margin-top:28px"><div><p class="kicker">SUGGESTIONS</p><h2>Who to call next</h2></div><div class="actions" style="margin:0"><button id="log-custom-match" class="text-button" type="button">+ Log custom</button><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div></div>
+          <div class="section-head" id="sec-next" style="margin-top:28px"><div><p class="kicker">SUGGESTIONS</p><h2>Who to call next</h2></div><div class="actions" style="margin:0"><button id="log-custom-match" class="text-button" type="button">+ Log custom</button><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div></div>
           <div id="recommendations" class="court-list"></div>
           <div id="waiting" class="waiting"></div>
         </section>
         <section>
-          <div class="section-head"><div><p class="kicker">FAIRNESS LEDGER</p><h2>Players</h2></div><button id="live-add-player" class="text-button">+ Join</button></div>
+          <div class="section-head" id="sec-players"><div><p class="kicker">FAIRNESS LEDGER</p><h2>Players</h2></div><button id="live-add-player" class="text-button">+ Join</button></div>
           <input id="ledger-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
           <div id="ledger" class="ledger"></div>
         </section>
       </div>
+      <!-- Floating bottom bar (nav-kit v1.0.0). Lives inside #live-view so it
+           exists only during a live session; jumps between the three blocks
+           of the one long page rather than hiding any of them. -->
+      <div class="gn-scrim"></div>
+      <nav class="gn" id="live-nav" aria-label="Session sections">
+        <button type="button" class="gn-item" data-gn="courts" aria-current="page">Courts</button>
+        <button type="button" class="gn-item" data-gn="next">Next</button>
+        <button type="button" class="gn-item" data-gn="players">Players</button>
+      </nav>
     </section>
   </main>
 
