@@ -1,5 +1,5 @@
-/* nav-kit v1.0.0 — companion to nav-kit.css. Classic script, no build step.
-   Include it with a deferred script tag (src="nav-kit.js", defer). This
+/* carpe-kit v2.0.0 — companion to carpe-kit.css (the bar behaviour). Classic script, no build step.
+   Include it with a deferred script tag (src="carpe-kit.js", defer). This
    comment avoids a literal closing script tag so the file can be inlined.
    It does exactly two jobs and nothing else:
      1. measures the rendered .gn height and writes it to --gn-h, so
@@ -64,7 +64,7 @@
 
   function init() { watchHeight(); watchKeyboard(); updateKbd(); }
 
-  window.NavKit = { version: '1.0.0', setActive: setActive, remeasure: watchHeight };
+  window.NavKit = { version: '2.0.0', setActive: setActive, remeasure: watchHeight };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();

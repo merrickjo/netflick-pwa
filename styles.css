@@ -13,8 +13,25 @@
 @media(max-width:780px){.stat-line{grid-template-columns:1fr;gap:4px}.lineup-teams-row{gap:7px}}
 @media(prefers-color-scheme:dark){.empty-court{border-color:#3d4d48}.lineup-teams{background:rgba(255,255,255,.03)}.chip-carry{background:rgba(229,168,94,.12)}.chip-intensity{background:rgba(238,118,109,.12)}.chip-light{background:rgba(114,188,143,.12)}}
 
-/* ── floating bottom bar: nav-kit tokens (look only; shape lives in nav-kit.css).
+/* ── floating bottom bar: carpe-kit colour tokens only (type + shape are shared).
    Pointing at this file's own variables means dark mode follows for free. */
-:root{--gn-bg:var(--ink);--gn-fg:var(--bg);--gn-active-bg:var(--accent);--gn-active-fg:#fff;--gn-scrim:var(--bg);--gn-size:14px;--gn-weight:800;--gn-tracking:.01em;--gn-case:none}
+:root{--gn-bg:var(--ink);--gn-fg:var(--bg);--gn-active-bg:var(--accent);--gn-active-fg:#fff;--gn-scrim:var(--bg)}
 @media(prefers-color-scheme:dark){:root{--gn-active-fg:#17221f}}
 #sec-courts,#sec-next,#sec-players{scroll-margin-top:calc(12px + env(safe-area-inset-top))}
+
+/* ── carpe-kit v2.0.0 alignment: the shared four voices + spacing ─────────
+   Sans reads · Condensed commands · Mono annotates · Literata titles.
+   Appended last so it wins over the rules above without rewriting them. */
+:root{font-family:var(--ck-ui)}
+.topbar h1{font-family:var(--ck-title);font-weight:600;letter-spacing:-.01em}
+.panel h2,.section-head h2,.dialog-head h2{font-family:var(--ck-title);font-weight:600;font-size:var(--ck-fs-section);letter-spacing:0}
+.eyebrow,.kicker,.metric,.court-type,.versus,.ledger-group-head,.summary-item span{font-family:var(--ck-data);font-weight:500;font-size:var(--ck-fs-label);letter-spacing:var(--ck-track-label);text-transform:uppercase}
+.primary,.secondary,.ghost,.text-button,.played,.carousel-tab,.picker strong,.team strong,.player-meta strong{font-family:var(--ck-display);font-weight:600;letter-spacing:.02em}
+.stepper output,.count-controls output,.summary-item strong,.tab-count,.grade-btn{font-family:var(--ck-data);font-variant-numeric:tabular-nums}
+label{font-family:var(--ck-data);font-weight:500;font-size:var(--ck-fs-label);letter-spacing:var(--ck-track-label);text-transform:uppercase}
+input,select{font-family:var(--ck-ui);text-transform:none;letter-spacing:0}
+.topbar{padding:var(--ck-s-6) var(--ck-s-5) var(--ck-s-4)}
+main{padding-top:var(--ck-s-4);padding-inline:var(--ck-s-5)}
+.panel{padding:var(--ck-s-5)}
+@media(max-width:780px){.topbar{padding:var(--ck-s-5) var(--ck-s-4) var(--ck-s-3)}main{padding-top:var(--ck-s-3);padding-inline:var(--ck-s-4)}}
+.topbar .ghost{white-space:nowrap}.section-head .metric{text-align:right}
