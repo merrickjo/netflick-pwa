@@ -32,27 +32,10 @@
       <div class="actions"><button id="connect" class="primary">Connect</button><button id="demo" class="secondary">Use demo players</button></div>
     </section>
 
-    <section id="setup-view" hidden>
-      <div class="setup-grid">
-        <div class="panel">
-          <p class="kicker">STEP 1</p><h2>How many courts?</h2>
-          <div class="stepper large"><button data-court-delta="-1" aria-label="Remove court">−</button><output id="setup-courts">2</output><button data-court-delta="1" aria-label="Add court">+</button></div>
-          <p id="capacity-note" class="muted"></p>
-        </div>
-        <div class="panel roster-picker">
-          <div class="section-head"><div><p class="kicker">STEP 2</p><h2>Who is playing?</h2></div><span id="selected-count" class="metric">0 selected</span></div>
-          <input id="player-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
-          <div id="player-picker" class="picker-list"></div>
-          <button id="open-add-player" class="text-button">+ Add a player</button>
-        </div>
-      </div>
-      <div class="sticky-action"><p id="setup-warning" class="warning"></p><button id="start-session" class="primary wide">Start session</button></div>
-    </section>
-
     <section id="live-view" hidden>
       <div class="live-toolbar panel">
-        <div><p class="kicker">LIVE SESSION</p><h2 id="session-title">Tonight</h2></div>
-        <div class="stepper"><button data-live-court-delta="-1" aria-label="Remove court">−</button><output id="live-courts">2 courts</output><button data-live-court-delta="1" aria-label="Add court">+</button></div>
+        <div><p class="kicker" id="live-kicker">TONIGHT</p><h2 id="session-title">Tonight</h2></div>
+        <div class="stepper"><button data-live-court-delta="-1" aria-label="Remove court">−</button><output id="live-courts">0 courts</output><button data-live-court-delta="1" aria-label="Add court">+</button></div>
       </div>
       <div id="summary" class="summary" aria-label="Session summary"></div>
       <div class="live-grid">
@@ -60,27 +43,39 @@
           <div class="section-head" id="sec-courts"><div><p class="kicker">NOW PLAYING</p><h2>Courts</h2></div><span id="courts-note" class="metric"></span></div>
           <div id="courts" class="court-list"></div>
 
-          <div class="section-head" id="sec-next" style="margin-top:28px"><div><p class="kicker">SUGGESTIONS</p><h2>Who to call next</h2></div><div class="actions" style="margin:0"><button id="log-custom-match" class="text-button" type="button">+ Log custom</button><button id="refresh-recommendation" class="icon-button" aria-label="Recompute recommendations">↻</button></div></div>
+          <div class="section-head" id="sec-next" style="margin-top:28px"><div><p class="kicker">SUGGESTIONS</p><h2>Who to call next</h2></div><div class="actions" style="margin:0"><button id="log-custom-match" class="text-button" type="button">+ Log custom</button><button id="refresh-recommendation" class="secondary refresh-btn" type="button" aria-label="Refresh match-ups">↻ Refresh</button></div></div>
           <div id="recommendations" class="court-list"></div>
           <div id="waiting" class="waiting"></div>
         </section>
         <section>
-          <div class="section-head" id="sec-players"><div><p class="kicker">FAIRNESS LEDGER</p><h2>Players</h2></div><button id="live-add-player" class="text-button">+ Join</button></div>
+          <div class="section-head" id="sec-players"><div><p class="kicker">FAIRNESS LEDGER</p><h2>Players</h2></div><button id="live-add-player" class="text-button" type="button" data-open-roster>+ Add players</button></div>
           <input id="ledger-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
           <div id="ledger" class="ledger"></div>
         </section>
       </div>
-      <!-- Floating bottom bar (carpe-kit v2.0.0). Lives inside #live-view so it
-           exists only during a live session; jumps between the three blocks
-           of the one long page rather than hiding any of them. -->
+      <!-- Floating bottom bar (carpe-kit v2.0.0). Jumps between the three
+           blocks of the one page; the filled action adds players from anywhere. -->
       <div class="gn-scrim"></div>
       <nav class="gn" id="live-nav" aria-label="Session sections">
         <button type="button" class="gn-item" data-gn="courts" aria-current="page">Courts</button>
         <button type="button" class="gn-item" data-gn="next">Next</button>
         <button type="button" class="gn-item" data-gn="players">Players</button>
+        <span class="gn-sep" aria-hidden="true"></span>
+        <button type="button" class="gn-item gn-action" data-open-roster aria-label="Add players">+ Add</button>
       </nav>
     </section>
   </main>
+
+  <dialog id="roster-dialog">
+    <form method="dialog" id="roster-form">
+      <div class="dialog-head"><div><p class="kicker">TONIGHT</p><h2>Add players</h2></div><button type="button" data-close-dialog class="icon-button" aria-label="Close">×</button></div>
+      <div class="roster-sync"><span id="roster-sync" class="metric">Not synced yet</span><button type="button" id="roster-sync-btn" class="text-button">↻ Sync</button></div>
+      <input id="roster-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
+      <div class="roster-meta"><span id="roster-count" class="metric">0 selected</span><button type="button" id="roster-all" class="text-button">Select all</button></div>
+      <div id="roster-picker" class="picker-list"></div>
+      <div class="sheet-foot"><button type="button" id="roster-new" class="text-button">+ New player</button><button type="button" id="roster-confirm" class="primary" disabled>Add players</button></div>
+    </form>
+  </dialog>
 
   <dialog id="player-dialog">
     <form method="dialog" id="player-form">
