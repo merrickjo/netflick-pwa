@@ -52,3 +52,44 @@ main{padding-top:var(--ck-s-4);padding-inline:var(--ck-s-5)}
 .sheet-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;margin-top:8px;border-top:1px solid var(--line)}
 .waiting:empty{display:none}
 #sec-next{flex-wrap:wrap;row-gap:8px}#sec-next .actions{flex-wrap:nowrap}#sec-next .actions button{white-space:nowrap}
+
+/* ── v13: My game (self-scout log → Obsidian) ─────────────────────────── */
+#sec-me{scroll-margin-top:calc(12px + env(safe-area-inset-top))}
+.me-panel{display:grid;gap:12px}.me-panel>.primary{width:100%}
+.me-who{margin-top:0}.me-panel .stat-note{margin-top:-4px}
+.me-summary{margin:0}
+.me-focus-in{border-left:3px solid var(--accent);background:var(--surface);padding:12px 14px;border-radius:0 10px 10px 0}.me-focus-in ul{margin:6px 0 0;padding-left:18px}
+.me-games{display:grid;gap:6px}
+.me-game{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--ink);font-family:var(--ck-display);font-weight:600}
+.me-game .n{font-family:var(--ck-data);font-weight:700;color:var(--soft)}.me-game small{display:block;color:var(--soft);font-family:var(--ck-data);font-weight:400;font-size:12px}
+.me-block{display:grid;gap:8px;margin-top:8px}.me-focus{display:grid;gap:6px}
+.focus-opt{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;text-align:left;width:100%;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:10px 12px;min-height:44px}
+.focus-opt[aria-pressed=true]{border-color:var(--positive);background:#e7f0eb}.focus-opt .tick{font-weight:900;color:var(--positive)}
+.sugg-tag{display:inline-block;font-family:var(--ck-data);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);border:1px solid var(--accent);border-radius:5px;padding:0 5px;margin-left:4px;vertical-align:middle}
+.me-row{display:flex;gap:8px;align-items:center}.me-row input{margin-top:0}.me-row button{flex:none}
+.me-export{margin-top:0;justify-content:stretch}.me-export button{flex:1}
+.me-settings summary{margin-top:4px}
+.field-label{margin:18px 0 0;font-family:var(--ck-data);font-weight:500;font-size:var(--ck-fs-label);letter-spacing:var(--ck-track-label);text-transform:uppercase}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.seg button{min-height:52px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-family:var(--ck-display);font-weight:700;font-size:17px}
+.seg [data-err=low][aria-pressed=true]{border-color:var(--positive);color:var(--positive);background:rgba(54,122,91,.12)}
+.seg [data-err=high][aria-pressed=true]{border-color:var(--risk);color:var(--risk);background:rgba(184,74,66,.12)}
+.me-counter{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}.me-counter .field-label{margin:0;text-transform:none;letter-spacing:0;font-size:var(--ck-fs-meta)}
+.me-actions{align-items:center;flex-wrap:wrap}.me-actions .spacer{flex:1}
+@media(prefers-color-scheme:dark){.focus-opt[aria-pressed=true]{background:#284236}}
+.me-actions #me-undo-round:not([hidden]),.me-actions #me-delete:not([hidden]){flex-basis:100%;text-align:left;order:-1;min-height:36px;padding:4px 0}
+
+/* v13b: richer game log */
+#me-dialog{max-height:calc(100dvh - 32px)}#me-form{max-height:calc(100dvh - 32px);overflow:auto;padding-bottom:0}
+#me-form .me-actions{position:sticky;bottom:0;background:var(--surface);padding:12px 0 16px;margin-top:8px;border-top:1px solid var(--line)}
+.me-h{margin:22px 0 0;padding-top:10px;border-top:1px solid var(--line);font-family:var(--ck-title);font-weight:600;font-size:16px}
+.me-q .field-label{margin:12px 0 0}
+.chipset{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chipset button{flex:1 1 auto;min-height:44px;min-width:44px;padding:6px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-family:var(--ck-display);font-weight:600;font-size:15px}
+.chipset button[aria-pressed=true]{border-color:var(--accent);background:rgba(223,107,67,.14);color:var(--accent-dark)}
+.me-counter span{font-size:var(--ck-fs-meta)}
+.me-hit{display:grid;gap:2px;margin-top:10px}.me-hit .chipset button{min-height:36px}
+.why-tag{display:block;margin-top:3px;font-family:var(--ck-data);font-size:11px;color:var(--accent-dark)}
+#me-focus-more{margin-top:0}
+.me-game b{font-family:var(--ck-data);color:var(--accent-dark)}
+@media(prefers-color-scheme:dark){.chipset button[aria-pressed=true]{background:rgba(237,123,84,.18);color:var(--accent)}}

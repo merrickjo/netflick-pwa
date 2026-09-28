@@ -51,6 +51,9 @@
           <div class="section-head" id="sec-players"><div><p class="kicker">FAIRNESS LEDGER</p><h2>Players</h2></div><button id="live-add-player" class="text-button" type="button" data-open-roster>+ Add players</button></div>
           <input id="ledger-search" class="search" type="search" placeholder="Search players" aria-label="Search players">
           <div id="ledger" class="ledger"></div>
+
+          <div class="section-head" id="sec-me" style="margin-top:28px"><div><p class="kicker">SELF-SCOUT</p><h2>My game</h2></div><span id="me-note" class="metric"></span></div>
+          <div id="me-panel" class="me-panel"></div>
         </section>
       </div>
       <!-- Floating bottom bar (carpe-kit v2.0.0). Jumps between the three
@@ -60,6 +63,7 @@
         <button type="button" class="gn-item" data-gn="courts" aria-current="page">Courts</button>
         <button type="button" class="gn-item" data-gn="next">Next</button>
         <button type="button" class="gn-item" data-gn="players">Players</button>
+        <button type="button" class="gn-item" data-gn="me">Me</button>
         <span class="gn-sep" aria-hidden="true"></span>
         <button type="button" class="gn-item gn-action" data-open-roster aria-label="Add players">+ Add</button>
       </nav>
@@ -97,6 +101,17 @@
       <div id="lineup-teams" class="lineup-teams" hidden></div>
       <p id="lineup-error" class="error" role="alert"></p>
       <div class="actions"><button type="button" data-close-dialog class="secondary">Cancel</button><button id="lineup-confirm" type="button" class="primary" disabled>Start</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="me-dialog">
+    <form method="dialog" id="me-form">
+      <div class="dialog-head"><div><p class="kicker">MY GAME</p><h2 id="me-dialog-title">Game 1</h2></div><button type="button" data-close-dialog class="icon-button" aria-label="Close">×</button></div>
+      <p id="me-dialog-sub" class="muted" style="margin:4px 0 0"></p>
+      <div id="me-fields"></div>
+      <label>Note<input id="me-note-input" maxlength="140" placeholder="Optional — one line"></label>
+      <p id="me-error" class="error" role="alert"></p>
+      <div class="actions me-actions"><button type="button" id="me-undo-round" class="text-button" hidden>Undo</button><button type="button" id="me-delete" class="text-button" hidden>Delete</button><span class="spacer"></span><button type="button" data-close-dialog class="secondary">Skip</button><button type="button" id="me-save" class="primary">Save</button></div>
     </form>
   </dialog>
 

@@ -46,3 +46,16 @@ Create a `netflick-pwa` GitHub repository, push these files, enable GitHub Pages
 ## Boundary
 
 This code never reads or writes the Sessions or Matches data sources. Registration/payment is intentionally absent from v1.
+## My game (self-scout → Obsidian)
+
+Tap **Me** in the bottom bar. Set "I'm playing as" once; after each of your rounds a quick log opens.
+Per game (~20 taps, only Result + Unforced errors required): result/margin · errors few/many + source shot (≤2) + main cause ·
+serve faults, flick serves tried/landed · return quality, flicks out of reach · who had the attack · positional mix-ups · legs.
+Game type (Carry/Intensity/Light) comes from the round log automatically. No timing is used — the phone isn't reliably at hand to start/stop rounds.
+Per night: energy coming in · did you hit last session's focus · session intensity (Easy → Max, qualitative) · what worked.
+Focus suggestions are ranked from where points leaked (need a pattern: ≥2 games and ≥30% of games), each with its reason.
+"Open in Obsidian" writes `Badminton/Netflick/YYYY-MM-DD Netflick.md` (properties in frontmatter for Dataview/Bases); re-sending overwrites.
+Why these inputs: bad shots decide ~65% of rally turning points and bad lifts cost most (Hammes & Link 2025); doubles rallies average ~7 shots,
+so serve/return matter most; self-recall is decent for rare events but undercounts errors (IJRSS tennis study), so errors are categories, not counts;
+self-monitoring against a plan is the habit that separates skill levels (Toering et al.); a whole-session effort rating is a validated monitoring tool (Haddad 2017).
+Local-only: nothing here is sent to the Worker/D1.
